@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Blox Manager</title>
+    <style>
+        body { font-family: sans-serif; background: #1a1a2e; color: #fff; display: flex; justify-content: center; padding: 50px; }
+        .card { background: #16213e; padding: 20px; border-radius: 12px; width: 400px; text-align: center; }
+        .item { background: #0f3460; padding: 10px; border-radius: 8px; display: inline-block; margin: 5px; }
+        .item img { width: 50px; height: 50px; object-fit: contain; }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h2>👤 <span id="username">Đang tải...</span></h2>
+    <p>Trạng thái: <span id="status" style="color:#4ade80">● Đang chờ</span></p>
+    <p>Level: <span id="level">0</span></p>
+    <h3>⚔️ Vật phẩm / Kỹ năng</h3>
+    <div id="items"></div>
+</div>
+<script>
+    const icons = { 
+        "Death Step": "https://static.wikia.nocookie.net/blox-fruits/images/c/c2/DeathStep.png", 
+        "Electro": "https://static.wikia.nocookie.net/blox-fruits/images/e/ea/Electro.png" 
+    };
+
+    setInterval(async () => {
+        try {
+            const res = await fetch('/api/get-account');
+            const data = await res.json();
+            document.getElementById('username').innerText = data.username;
+            document.getElementById('status').innerText = data.status === "Online" ? "● Hoạt động" : "○ Ngoại tuyến";
+            document.getElementById('level').innerText = data.level;
+            
+            document.getElementById('items').innerHTML = data.fightingStyles.map(i => 
+                `<div class="item"><img src="${icons[i] || 'https://via.placeholder.com/50'}"><br><small>${i}</small></div>`
+            ).join('');
+        } catch(e) {}
+    }, 3000); 
+</script>
+</body>
+</html>
