@@ -3,71 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ManageBlox Pro Panel</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>ManageBlox Pro | Bảng Điều Khiển</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
-        body { background: #0f172a; color: #e2e8f0; min-height: 100vh; padding: 20px; }
-        .header { text-align: center; margin-bottom: 30px; }
-        .header h1 { font-size: 2.5rem; color: #38bdf8; text-transform: uppercase; letter-spacing: 2px; text-shadow: 0 0 10px rgba(56, 189, 248, 0.5); }
-        .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; }
-        .card { background: #1e293b; border-radius: 16px; padding: 20px; border: 1px solid #334155; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.5); transition: 0.3s; position: relative; overflow: hidden; }
-        .card:hover { border-color: #38bdf8; transform: translateY(-5px); }
-        .status-badge { position: absolute; top: 15px; right: 15px; padding: 5px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; }
-        .online { background: rgba(34, 197, 94, 0.2); color: #4ade80; border: 1px solid #4ade80; }
-        .offline { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #f87171; }
-        .user-info { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
-        .avatar { width: 60px; height: 60px; border-radius: 50%; background: #334155; border: 2px solid #38bdf8; object-fit: cover; }
-        .username { font-size: 1.2rem; font-weight: bold; color: #fff; }
-        .stat-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9rem; }
-        .val { font-weight: 600; color: #facc15; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        body { background: #0b0f19; color: #e2e8f0; min-height: 100vh; padding: 20px; }
+        .header { text-align: center; margin-bottom: 40px; }
+        .header h1 { font-size: 2.8rem; color: #00f2fe; text-transform: uppercase; letter-spacing: 1px; text-shadow: 0 0 15px rgba(0, 242, 254, 0.4); }
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 25px; max-width: 1300px; margin: 0 auto; }
         
-        /* Thanh Level Max 2800 */
-        .progress-bg { background: #334155; height: 12px; border-radius: 6px; overflow: hidden; margin-top: 5px; margin-bottom: 15px; }
-        .progress-bar { background: linear-gradient(90deg, #38bdf8, #818cf8); height: 100%; border-radius: 6px; transition: width 0.5s ease; }
+        /* Card Account */
+        .card { background: #151b2b; border-radius: 16px; padding: 25px; border: 1px solid #1e293b; box-shadow: 0 4px 20px rgba(0,0,0,0.6); position: relative; transition: all 0.3s; }
+        .card:hover { border-color: #00f2fe; transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,242,254,0.15); }
+        .status { position: absolute; top: 20px; right: 20px; font-size: 0.8rem; font-weight: 600; padding: 5px 12px; border-radius: 20px; }
+        .online { background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid #10b981; }
+        .offline { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid #ef4444; }
         
-        .inventory { display: flex; gap: 10px; margin-top: 15px; background: #0f172a; padding: 10px; border-radius: 10px; justify-content: space-around; }
-        .item { text-align: center; }
-        .item img { width: 45px; height: 45px; object-fit: contain; filter: drop-shadow(0 0 5px rgba(255,255,255,0.2)); }
-        .item span { display: block; font-size: 0.75rem; color: #94a3b8; margin-top: 5px; }
+        /* Info */
+        .user-info { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
+        .avatar { width: 65px; height: 65px; border-radius: 50%; border: 2px solid #00f2fe; }
+        .username { font-size: 1.3rem; font-weight: bold; color: #fff; }
+        
+        /* Stats */
+        .stat-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.95rem; }
+        .val { font-weight: 600; color: #f59e0b; }
+        .progress-bg { background: #1e293b; height: 10px; border-radius: 5px; margin-bottom: 20px; overflow: hidden; }
+        .progress-bar { background: linear-gradient(90deg, #00f2fe, #4facfe); height: 100%; border-radius: 5px; transition: 0.5s; }
+        
+        /* Buttons */
+        .btn-details { width: 100%; background: #1d4ed8; color: #fff; border: none; padding: 12px; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: 0.2s; margin-top: 15px; }
+        .btn-details:hover { background: #2563eb; }
+
+        /* Modal (Cửa sổ chi tiết) */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); justify-content: center; align-items: center; }
+        .modal-content { background: #151b2b; padding: 30px; border-radius: 16px; width: 90%; max-width: 600px; border: 1px solid #1e293b; position: relative; max-height: 80vh; overflow-y: auto; }
+        .close-btn { position: absolute; top: 15px; right: 20px; font-size: 1.8rem; color: #94a3b8; cursor: pointer; }
+        .close-btn:hover { color: #fff; }
+        .inventory-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 15px; margin-top: 20px; }
+        .item-box { background: #0f172a; border: 1px solid #1e293b; border-radius: 10px; padding: 15px 10px; text-align: center; }
+        .item-box img { width: 50px; height: 50px; object-fit: contain; margin-bottom: 10px; filter: drop-shadow(0 0 5px rgba(255,255,255,0.1)); }
+        .item-box span { display: block; font-size: 0.75rem; font-weight: 600; color: #cbd5e1; word-wrap: break-word; }
     </style>
 </head>
 <body>
 
 <div class="header">
-    <h1>Quản Lý Trạm Farm</h1>
-    <p>Hệ thống đồng bộ trực tiếp với máy chủ Roblox</p>
+    <h1>ManageBlox Panel</h1>
 </div>
 
-<div class="grid-container" id="accounts-grid">
-    <!-- Các tài khoản sẽ xuất hiện ở đây -->
+<div class="grid-container" id="accounts-grid"></div>
+
+<!-- Khung Modal Ẩn -->
+<div id="detailsModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+        <h2 id="modal-title" style="color: #00f2fe; margin-bottom: 5px;">Kho đồ chi tiết</h2>
+        <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 20px;">Những vật phẩm đang trang bị trong Balo</p>
+        <div id="modal-inventory" class="inventory-grid"></div>
+    </div>
 </div>
 
 <script>
-    // Kho ảnh lấy chuẩn từ Blox Fruits Wiki
+    // Data lưu tạm để Modal dùng
+    let globalData = []; 
+
+    // Thư viện Icon khủng nhất (Cập nhật Melee, Kiếm, Súng, Trái)
     const imageLib = {
         "Godhuman": "https://static.wikia.nocookie.net/blox-fruits/images/1/1d/Godhuman_Icon.png",
         "Sanguine Art": "https://static.wikia.nocookie.net/blox-fruits/images/3/36/Sanguine_Art_Icon.png",
-        "Kitsune Fruit": "https://static.wikia.nocookie.net/blox-fruits/images/9/98/Kitsune_Fruit_Icon.png",
-        "Dough Fruit": "https://static.wikia.nocookie.net/blox-fruits/images/6/67/Dough_Fruit_Icon.png",
+        "Sharkman Karate": "https://static.wikia.nocookie.net/blox-fruits/images/d/d4/Sharkman_Karate_Icon.png",
+        "Electric Claw": "https://static.wikia.nocookie.net/blox-fruits/images/c/c5/Electric_Claw_Icon.png",
+        "Dragon Talon": "https://static.wikia.nocookie.net/blox-fruits/images/4/4c/Dragon_Talon_Icon.png",
+        "Death Step": "https://static.wikia.nocookie.net/blox-fruits/images/c/c2/DeathStep.png",
         "Cursed Dual Katana": "https://static.wikia.nocookie.net/blox-fruits/images/5/52/Cursed_Dual_Katana_Icon.png",
-        "Shark Anchor": "https://static.wikia.nocookie.net/blox-fruits/images/4/4c/Shark_Anchor_Icon.png"
+        "True Triple Katana": "https://static.wikia.nocookie.net/blox-fruits/images/8/87/True_Triple_Katana_Icon.png",
+        "Shark Anchor": "https://static.wikia.nocookie.net/blox-fruits/images/4/4c/Shark_Anchor_Icon.png",
+        "Dark Blade": "https://static.wikia.nocookie.net/blox-fruits/images/4/43/Dark_Blade_Icon.png",
+        "Soul Guitar": "https://static.wikia.nocookie.net/blox-fruits/images/7/70/Soul_Guitar_Icon.png",
+        "Kitsune-Kitsune": "https://static.wikia.nocookie.net/blox-fruits/images/9/98/Kitsune_Fruit_Icon.png",
+        "Leopard-Leopard": "https://static.wikia.nocookie.net/blox-fruits/images/5/54/Leopard_Fruit_Icon.png",
+        "Dough-Dough": "https://static.wikia.nocookie.net/blox-fruits/images/6/67/Dough_Fruit_Icon.png",
+        "Buddha-Buddha": "https://static.wikia.nocookie.net/blox-fruits/images/0/07/Buddha_Fruit_Icon.png"
     };
+
+    // Ảnh dự phòng khi Wiki chặn ảnh hoặc đồ không có trong list
+    const fallbackImage = "https://cdn-icons-png.flaticon.com/512/3855/3855833.png";
 
     async function updateDashboard() {
         try {
             const res = await fetch('/api/get-account');
-            const data = await res.json();
+            globalData = await res.json();
             const grid = document.getElementById('accounts-grid');
-            grid.innerHTML = ''; // Xóa cũ vẽ mới
+            grid.innerHTML = ''; 
 
-            if(data.length === 0) {
-                grid.innerHTML = '<p style="text-align:center; width: 100%; color:#64748b;">Chưa có tài khoản nào kết nối...</p>';
+            if(globalData.length === 0) {
+                grid.innerHTML = '<h3 style="color:#64748b; grid-column: 1/-1; text-align:center;">Đang chờ dữ liệu từ Script...</h3>';
                 return;
             }
 
-            data.forEach(acc => {
-                // Tính phần trăm level max 2800
+            globalData.forEach(acc => {
                 const maxLevel = 2800;
                 let percent = (acc.level / maxLevel) * 100;
                 if(percent > 100) percent = 100;
@@ -75,49 +109,83 @@
                 const statusClass = acc.status === "Online" ? "online" : "offline";
                 const statusText = acc.status === "Online" ? "● Trực tuyến" : "○ Mất kết nối";
 
-                // Map HTML hòm đồ
-                let itemsHTML = acc.inventory.map(item => `
-                    <div class="item">
-                        <img src="${imageLib[item] || 'https://via.placeholder.com/45/334155/FFFFFF?text=?'}" alt="${item}">
-                        <span>${item}</span>
-                    </div>
-                `).join('');
+                // Chỉ hiện 3 món đồ đầu tiên trên Card cho đỡ rối
+                const topItems = (acc.inventory || []).slice(0, 3).map(item => {
+                    let imgSource = imageLib[item] || fallbackImage;
+                    return `<img src="${imgSource}" title="${item}" onerror="this.src='${fallbackImage}'" style="width:40px; height:40px; background:#0f172a; padding:5px; border-radius:8px; margin-right:5px;">`;
+                }).join('');
 
                 grid.innerHTML += `
                     <div class="card">
-                        <div class="status-badge ${statusClass}">${statusText}</div>
+                        <div class="status ${statusClass}">${statusText}</div>
                         <div class="user-info">
-                            <img class="avatar" src="https://roblox-avatar.luis-104.workers.dev/?username=${acc.username}" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'" alt="avatar">
+                            <img class="avatar" src="https://roblox-avatar.luis-104.workers.dev/?username=${acc.username}" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'">
                             <div>
                                 <div class="username">${acc.username}</div>
-                                <div style="font-size:0.8rem; color:#94a3b8;">Race: ${acc.race}</div>
+                                <div style="font-size:0.85rem; color:#94a3b8;">Tộc: <span style="color:#fff">${acc.race || 'Chưa rõ'}</span></div>
                             </div>
                         </div>
                         
                         <div class="stat-row">
-                            <span>Level: <b class="val" style="color:#fff">${acc.level}</b> / ${maxLevel}</span>
+                            <span>Cấp độ: <b class="val" style="color:#00f2fe">${acc.level}</b> / ${maxLevel}</span>
                             <span>${percent.toFixed(1)}%</span>
                         </div>
                         <div class="progress-bg"><div class="progress-bar" style="width: ${percent}%;"></div></div>
 
                         <div class="stat-row">
                             <span>💵 Beli: <span class="val">${acc.beli}</span></span>
-                            <span>🟣 Frag: <span class="val">${acc.frag}</span></span>
+                            <span>🟣 F: <span class="val" style="color:#d946ef">${acc.frag}</span></span>
+                        </div>
+                        
+                        <div style="margin-top: 15px; display:flex; align-items:center;">
+                            <span style="font-size:0.85rem; color:#94a3b8; margin-right:10px;">Trang bị:</span>
+                            ${topItems || '<span style="font-size:0.85rem; color:#64748b;">Trống</span>'}
                         </div>
 
-                        <div class="inventory">
-                            ${itemsHTML}
-                        </div>
+                        <button class="btn-details" onclick="openModal('${acc.username}')">Xem Chi Tiết TK</button>
                     </div>
                 `;
             });
         } catch(e) {
-            console.error("Lỗi cập nhật bảng điều khiển:", e);
+            console.error("Lỗi:", e);
         }
     }
 
-    // Quét web mỗi 3 giây để giao diện mượt
-    setInterval(updateDashboard, 3000);
+    function openModal(username) {
+        const acc = globalData.find(a => a.username === username);
+        if(!acc) return;
+
+        document.getElementById('modal-title').innerText = `Kho đồ: ${username}`;
+        const modalInv = document.getElementById('modal-inventory');
+        
+        let items = acc.inventory || [];
+        if(items.length === 0) {
+            modalInv.innerHTML = '<p style="color:#94a3b8; grid-column: 1/-1;">Không có vũ khí nào trong Balo</p>';
+        } else {
+            modalInv.innerHTML = items.map(item => {
+                let imgSource = imageLib[item] || fallbackImage;
+                return `
+                    <div class="item-box">
+                        <img src="${imgSource}" onerror="this.src='${fallbackImage}'">
+                        <span>${item}</span>
+                    </div>
+                `;
+            }).join('');
+        }
+        document.getElementById('detailsModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('detailsModal').style.display = 'none';
+    }
+
+    // Đóng modal khi bấm ra ngoài rìa
+    window.onclick = function(event) {
+        const modal = document.getElementById('detailsModal');
+        if (event.target === modal) closeModal();
+    }
+
+    setInterval(updateDashboard, 5000); // Quét mỗi 5 giây
     updateDashboard();
 </script>
 </body>
