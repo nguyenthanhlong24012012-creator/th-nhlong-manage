@@ -6,28 +6,39 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Biến lưu dữ liệu tạm thời
-let accountData = { username: "Chưa kết nối", status: "Offline", level: 0, fightingStyles: [] };
+// Biến lưu trữ nhiều tài khoản
+let accounts = {};
 
-// API nhận dữ liệu từ Roblox
 app.post('/api/update-account', (req, res) => {
     if (req.body && req.body.username) {
-        accountData = { ...req.body, status: "Online" };
+        accounts[req.body.username] = { 
+            ...req.body, 
+            status: "Online",
+            lastUpdate: Date.now() 
+        };
         res.status(200).send("OK");
     } else {
-        res.status(400).send("Lỗi");
+        res.status(400).send("Thiếu dữ liệu");
     }
 });
 
-// API trả dữ liệu cho Web
 app.get('/api/get-account', (req, res) => {
-    res.status(200).json(accountData);
+    const now = Date.now();
+    let accountsArray = [];
+    
+    // Tự động set Offline nếu quá 15 giây không nhận được tín hiệu (treo game, dis mạng)
+    for (let username in accounts) {
+        if (now - accounts[username].lastUpdate > 15000) {
+            accounts[username].status = "Offline";
+        }
+        accountsArray.push(accounts[username]);
+    }
+    
+    res.status(200).json(accountsArray);
 });
 
-// Trang chủ hiển thị giao diện HTML
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// BẮT BUỘC PHẢI CÓ DÒNG NÀY ĐỂ VERCEL CHẠY ĐƯỢC
 module.exports = app;
